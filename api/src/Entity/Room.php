@@ -18,16 +18,10 @@ class Room
     #[ORM\Column(type: 'string', length: 255)]
     public string $name = '';
 
-    #[ORM\Column(type: 'text')]
-    public string $description = '';
-
-    #[ORM\Column(type: 'text')]
-    public string $hotel = '';
-
     #[ORM\Column]
     public ?\DateTimeInterface $availableAt = null;
 
-    #[ORM\Column]
+    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Booking::class, cascade: ['persist', 'remove'])]
     public iterable $bookings;
 
     public function __construct()

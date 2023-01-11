@@ -21,15 +21,7 @@ class Booking
     #[ORM\Column(type: 'text')]
     public string $message = '';
 
-    #[ORM\Column]
-    public int $person = 0;
-
-    public ?\DateTimeInterface $bookedAt = null;
-
-    public ?\DateTimeInterface $checkInAt = null;
-
-    public ?\DateTimeInterface $checkOutAt = null;
-
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
     public ?Room $room = null;
 
     public function getId(): ?int
