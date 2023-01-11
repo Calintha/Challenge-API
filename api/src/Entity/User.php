@@ -23,12 +23,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can access the list of users.',
+        ),
         new Post(processor: UserPasswordHasher::class),
-        new Get(),
-        new Put(processor: UserPasswordHasher::class),
+        new Get(
+            security: 'is_granted("ROLE_ADMIN") or object == user',
+            securityMessage: 'Only admins can access other users.',
+        ),
+        new Put(processor: UserPasswordHasher::class,
+            security: 'is_granted("ROLE_ADMIN") or object == user',
+            securityMessage: 'Only admins can edit other users.',),
         new Patch(processor: UserPasswordHasher::class),
-        new Delete(),
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN") or object == user',
+            securityMessage: 'Only admins can delete other users.',
+        ),
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:create', 'user:update']],
